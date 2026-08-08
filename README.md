@@ -1,61 +1,57 @@
-# Cart Rescue AI
+# 🛒 Cart Rescue AI
 
-AI-powered Cart Abandonment Prediction System
+AI-powered Cart Abandonment Prediction System using Machine Learning and Multi-Agent AI.
 
 ## Features
 
-- AI predicts cart abandonment risk
-- Risk Levels (Low/Medium/High)
-- Diagnosis Agent
-- Recommendation Agent
-- Coupon Generation
-- Payment Simulation
-- Dashboard Analytics
-- XGBoost Machine Learning
-- FastAPI Backend
-- React Frontend
+- 🤖 XGBoost-based abandonment prediction
+- 🧠 Multi-Agent AI decision engine
+- 📊 Real-time analytics dashboard
+- 💳 Payment simulation
+- 🎁 Personalized intervention recommendations
+- 📈 AI Holdout Validation
+- 📝 Audit logging
+- 🛡️ Policy Guardrails
 
 ## Tech Stack
 
 Frontend
 - React
+- Recharts
 - Axios
 
 Backend
 - FastAPI
 - Python
+- Pandas
 
 Machine Learning
 - XGBoost
-- Pandas
 - Scikit-learn
 
-## Project Structure
+## Architecture
 
-backend/
-frontend/
-ml/
-data/
+Prediction Form
+↓
+Risk Agent
+↓
+Diagnosis Agent
+↓
+Recommendation Agent
+↓
+Policy Guardrail
+↓
+Review Agent
+↓
+Audit Logger
+↓
+Dashboard Analytics
 
 ## Installation
 
 Backend
 
+```bash
+cd backend
 pip install -r requirements.txt
-uvicorn backend.app:app --reload
-
-Frontend
-
-npm install
-npm run dev
-
-## Demo
-
-(Add screenshots)
-
-## Future Improvements
-
-- LLM Recommendation Agent
-- Real-time Prediction
-- Personalized Coupons
-- Email Notifications
+uvicorn app:app --reload
