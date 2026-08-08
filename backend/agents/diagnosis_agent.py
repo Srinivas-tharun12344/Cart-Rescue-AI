@@ -1,28 +1,23 @@
 def diagnose(data):
 
-    reasons = []
+    # Long delivery time
+    if data["estimated_delivery_days"] > 5:
+        return "Long Delivery Time"
 
-    # Delivery
-    if data["delivery_days"] > 5:
-        reasons.append("Long Delivery Time")
+    # Cash on Delivery unavailable
+    if data["cash_on_delivery"] == "Unavailable":
+        return "Cash On Delivery Unavailable"
 
-    # COD
-    if not data["cod_available"]:
-        reasons.append("Cash On Delivery Not Available")
-
-    # Browsing
-    if data["add_to_cart"] == 0:
-        reasons.append("Browsing Only")
-
-    # Price comparison
-    if data["product_views"] >= 5:
-        reasons.append("Price Comparison")
+    # Customer comparing products
+    if data["page_views"] > 10 and data["add_to_cart"] == 0:
+        return "Price Comparison"
 
     # Low engagement
-    if data["page_views"] <= 3 and data["session_duration"] < 120:
-        reasons.append("Low Customer Engagement")
+    if data["session_duration"] < 60:
+        return "Low Customer Engagement"
 
-    if len(reasons) == 0:
-        return "Normal Shopping Behaviour"
+    # Marketing disabled
+    if not data["marketing_opt_in"]:
+        return "Customer Not Opted for Marketing"
 
-    return ", ".join(reasons)
+    return "Normal Shopping Behaviour"

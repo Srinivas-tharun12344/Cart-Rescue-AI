@@ -1,99 +1,154 @@
-import os
-import joblib
 import pandas as pd
+import joblib
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import (
-    accuracy_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    roc_auc_score,
-)
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import accuracy_score
 
 from xgboost import XGBClassifier
 
-print("=" * 50)
-print("Loading Dataset...")
-print("=" * 50)
+print("Loading processed dataset...")
 
-# Load processed features
 df = pd.read_csv("data/processed/session_features.csv")
 
 print(df.head())
+print("\nDataset Shape:", df.shape)
 
-# -------------------------
-# Remove identifier columns
-# -------------------------
-drop_cols = []
+# -------------------------------------------------
+# Create Target (Abandoned = 1, Purchased = 0)
+# -------------------------------------------------
 
-for col in [
-    "UserID",
-    "SessionID",
-    "Purchased",
-    "purchases",      # remove
-    "cart_value"      # remove
-]:
-    if col in df.columns:
-        drop_cols.append(col)
+df["Abandoned"] = 1 - df["Purchased"]
 
-X = df.drop(columns=drop_cols)
+# -------------------------------------------------
+# Target
+# -------------------------------------------------
 
-y = df["Purchased"]
+y = df["Abandoned"]
 
-print("\nNumber of Features:", X.shape[1])
-print("Number of Samples :", X.shape[0])
+# -------------------------------------------------
+# Features
+# -------------------------------------------------
 
-# -------------------------
-# Train-Test Split
-# -------------------------
+X = df[
+    [
+        "Page Views",
+        "Product Views",
+        "Add To Cart",
+        "Session Duration",
+        "age",
+        "marketing_opt_in",
+        "Estimated Delivery Days",
+        "Cash On Delivery",
+        "device",
+        "country",
+        "source",
+    ]
+]
+
+# -------------------------------------------------
+# Categorical Columns
+# -------------------------------------------------
+
+categorical = [
+    "Cash On Delivery",
+    "device",
+    "country",
+    "source",
+]
+
+numeric = [
+    "Page Views",
+    "Product Views",
+    "Add To Cart",
+    "Session Duration",
+    "age",
+    "marketing_opt_in",
+    "Estimated Delivery Days",
+]
+
+# -------------------------------------------------
+# Preprocessing
+# -------------------------------------------------
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        (
+            "cat",
+            OneHotEncoder(handle_unknown="ignore"),
+            categorical,
+        ),
+        (
+            "num",
+            "passthrough",
+            numeric,
+        ),
+    ]
+)
+
+# -------------------------------------------------
+# Handle Imbalanced Dataset
+# -------------------------------------------------
+
+positive = (y == 1).sum()
+negative = (y == 0).sum()
+
+scale_pos_weight = negative / positive
+
+print("\nPurchased :", negative)
+print("Abandoned :", positive)
+print("Scale Pos Weight :", round(scale_pos_weight, 2))
+
+# -------------------------------------------------
+# XGBoost Model
+# -------------------------------------------------
+
+model = Pipeline(
+    steps=[
+        ("preprocessor", preprocessor),
+        (
+            "classifier",
+            XGBClassifier(
+                n_estimators=250,
+                max_depth=6,
+                learning_rate=0.05,
+                random_state=42,
+                eval_metric="logloss",
+                scale_pos_weight=scale_pos_weight,
+            ),
+        ),
+    ]
+)
+
+# -------------------------------------------------
+# Train/Test Split
+# -------------------------------------------------
+
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
-    test_size=0.2,
+    test_size=0.20,
     random_state=42,
     stratify=y,
 )
 
-print("\nTraining Samples :", len(X_train))
-print("Testing Samples  :", len(X_test))
-
-# -------------------------
-# Train Model
-# -------------------------
 print("\nTraining XGBoost Model...")
-
-model = XGBClassifier(
-    n_estimators=150,
-    max_depth=5,
-    learning_rate=0.1,
-    random_state=42,
-    eval_metric="logloss",
-)
 
 model.fit(X_train, y_train)
 
-# -------------------------
-# Predictions
-# -------------------------
 pred = model.predict(X_test)
-prob = model.predict_proba(X_test)[:, 1]
 
-print("\nModel Evaluation")
-print("=" * 50)
+acc = accuracy_score(y_test, pred)
 
-print("Accuracy :", round(accuracy_score(y_test, pred), 4))
-print("Precision:", round(precision_score(y_test, pred), 4))
-print("Recall   :", round(recall_score(y_test, pred), 4))
-print("F1 Score :", round(f1_score(y_test, pred), 4))
-print("ROC AUC  :", round(roc_auc_score(y_test, prob), 4))
+print("\nAccuracy :", round(acc, 4))
 
-# -------------------------
+# -------------------------------------------------
 # Save Model
-# -------------------------
-os.makedirs("data/models", exist_ok=True)
+# -------------------------------------------------
 
 joblib.dump(model, "data/models/cart_model.pkl")
 
-print("\n✅ Model Saved Successfully!")
-print("Location: data/models/cart_model.pkl")
+print("\nModel Saved Successfully!")
+print("\nModel saved at data/models/cart_model.pkl")

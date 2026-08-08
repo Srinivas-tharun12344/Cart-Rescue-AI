@@ -79,3 +79,61 @@ Timestamp,Risk Score,Risk Level,Diagnosis,Recommendation,Policy Decision,Payment
 2026-08-08 10:27:18,0.4053591191768646,Medium,Price Comparison,Offer 5% Coupon,Decision Approved,Pending
 2026-08-08 10:27:19,0.4053591191768646,Medium,Price Comparison,Offer 5% Coupon,Decision Approved,Pending
 2026-08-08 10:27:23,0.1152430474758148,Low,Price Comparison,Proceed To Checkout,Decision Approved,Success
+2026-08-08 11:55:35,0.0113740395754575,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:32:00,0.0335051715373992,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:16,0.0335051715373992,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:17,0.0335051715373992,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:27,0.0335051715373992,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:41,0.0007312406087294,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:50,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:35:53,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Success
+2026-08-08 12:36:46,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Success
+2026-08-08 12:36:57,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:36:57,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:36:57,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:36:57,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:36:58,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:36:58,0.0009637236362323,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:37:13,0.0004821943002752,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 12:38:27,3.382365684956312e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:40:58,3.382365684956312e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:41:41,0.014358602464199,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:49:47,3.382365684956312e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:50:47,0.0008046251605264,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:50:48,0.0008046251605264,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:51:02,0.0008046251605264,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:51:13,3.382365684956312e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:51:13,3.382365684956312e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:51:25,3.3048130717361346e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:53:26,0.0109213180840015,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:53:39,4.889408955932595e-05,Low,Price Comparison,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:53:41,4.889408955932595e-05,Low,Price Comparison,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:53:47,0.0119873248040676,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Failed
+2026-08-08 12:57:06,0.0123793128877878,Low,Customer Not Opted for Marketing,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:58:30,0.0123793128877878,Low,Customer Not Opted for Marketing,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:58:35,0.0119873248040676,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:58:41,0.0123793128877878,Low,Customer Not Opted for Marketing,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 12:58:47,0.0119873248040676,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Success
+2026-08-08 12:59:27,3.211264265701175e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Failed
+2026-08-08 12:59:54,3.211264265701175e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 12:59:57,3.211264265701175e-05,Low,Low Customer Engagement,Send Personalized Notification,Decision Approved,Pending
+2026-08-08 13:00:15,3.211264265701175e-05,Low,Cash On Delivery Unavailable,Enable COD or Suggest UPI,Decision Approved,Pending
+2026-08-08 13:00:16,3.211264265701175e-05,Low,Cash On Delivery Unavailable,Enable COD or Suggest UPI,Decision Approved,Pending
+2026-08-08 13:00:16,3.211264265701175e-05,Low,Cash On Delivery Unavailable,Enable COD or Suggest UPI,Decision Approved,Pending
+2026-08-08 13:00:16,3.211264265701175e-05,Low,Cash On Delivery Unavailable,Enable COD or Suggest UPI,Decision Approved,Pending
+2026-08-08 13:01:21,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:22,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:22,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:22,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:22,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:23,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:01:26,3.211264265701175e-05,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:05:53,0.0003925670753233135,Low,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:14:14,0.9995477795600891,High,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending
+2026-08-08 13:16:03,0.9627450108528137,High,Normal Shopping Behaviour,Offer 15% Coupon,Decision Approved,Pending
+2026-08-08 13:28:11,0.9627450108528137,High,Normal Shopping Behaviour,Offer 15% Coupon,Decision Approved,Pending
+2026-08-08 13:29:12,0.45110782980918884,Medium,Normal Shopping Behaviour,Offer 5% Coupon,Decision Approved,Pending
+2026-08-08 13:30:55,0.9976662397384644,High,Normal Shopping Behaviour,Offer 15% Coupon,Decision Approved,Pending
+2026-08-08 13:33:04,0.3153623580932617,Low,Normal Shopping Behaviour,Proceed To Checkout,Decision Approved,Pending
+2026-08-08 13:33:35,0.698366367816925,Medium,Normal Shopping Behaviour,Offer 5% Coupon,Decision Approved,Pending
+2026-08-08 13:34:15,0.9549772191047669,High,Long Delivery Time,Offer Faster Delivery,Decision Approved,Pending

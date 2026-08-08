@@ -4,45 +4,90 @@ import api from "../services/api";
 function PredictionForm() {
 
     const [form, setForm] = useState({
+
         page_views: "",
         product_views: "",
         add_to_cart: "",
         session_duration: "",
-        delivery_days: "",
-        cod_available: true
+
+        estimated_delivery_days: "",
+
+        cash_on_delivery: "Available",
+
+        device: "mobile",
+
+        source: "organic",
+
+        country: "US",
+
+        age: "",
+
+        marketing_opt_in: true
+
     });
 
     const [result, setResult] = useState(null);
 
     const predict = () => {
 
-        api.post("/predict", {
+        const payload = {
 
             page_views: Number(form.page_views),
+
             product_views: Number(form.product_views),
+
             add_to_cart: Number(form.add_to_cart),
+
             session_duration: Number(form.session_duration),
-            delivery_days: Number(form.delivery_days),
-            cod_available: form.cod_available
 
-        })
+            estimated_delivery_days: Number(
+                form.estimated_delivery_days
+            ),
 
-        .then((res) => {
+            cash_on_delivery: form.cash_on_delivery,
 
-            setResult(res.data);
+            device: form.device,
 
-            localStorage.setItem(
-                "risk_level",
-                res.data.risk_level
-            );
+            source: form.source,
 
-        })
+            country: form.country,
 
-        .catch((err) => {
+            age: Number(form.age),
 
-            console.log(err);
+            marketing_opt_in: form.marketing_opt_in
 
-        });
+        };
+
+        console.log("FORM:", form);
+
+        console.log("PAYLOAD:", payload);
+
+        api.post("/predict", payload)
+
+            .then((res) => {
+
+                console.log("Prediction:", res.data);
+
+                setResult(res.data);
+
+                localStorage.setItem(
+                    "risk_level",
+                    res.data.risk_level
+                );
+
+            })
+
+            .catch((err) => {
+
+                console.log("Prediction Error:", err);
+
+                if (err.response) {
+
+                    console.log(err.response.data);
+
+                }
+
+            });
 
     };
 
@@ -50,9 +95,11 @@ function PredictionForm() {
 
         if (!result) return "#2563eb";
 
-        if (result.risk_level === "High") return "#ef4444";
+        if (result.risk_level === "High")
+            return "#ef4444";
 
-        if (result.risk_level === "Medium") return "#f59e0b";
+        if (result.risk_level === "Medium")
+            return "#f59e0b";
 
         return "#22c55e";
 
@@ -65,25 +112,31 @@ function PredictionForm() {
                 background: "white",
                 padding: "35px",
                 borderRadius: "15px",
-                boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
+                boxShadow:
+                    "0 8px 20px rgba(0,0,0,0.12)",
                 marginTop: "35px"
             }}
         >
 
-            <h2 style={{ marginBottom: "25px" }}>
+            <h2
+                style={{
+                    marginBottom: "25px"
+                }}
+            >
                 🤖 AI Customer Prediction
             </h2>
 
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(2,1fr)",
+                    gridTemplateColumns:
+                        "repeat(2,1fr)",
                     gap: "20px"
                 }}
             >
+                                {/* Page Views */}
 
                 <div>
-
                     <label>Page Views</label>
 
                     <input
@@ -97,11 +150,11 @@ function PredictionForm() {
                         }
                         style={inputStyle}
                     />
-
                 </div>
 
-                <div>
+                {/* Product Views */}
 
+                <div>
                     <label>Product Views</label>
 
                     <input
@@ -115,11 +168,11 @@ function PredictionForm() {
                         }
                         style={inputStyle}
                     />
-
                 </div>
 
-                <div>
+                {/* Add To Cart */}
 
+                <div>
                     <label>Add To Cart</label>
 
                     <input
@@ -133,11 +186,11 @@ function PredictionForm() {
                         }
                         style={inputStyle}
                     />
-
                 </div>
 
-                <div>
+                {/* Session Duration */}
 
+                <div>
                     <label>Session Duration (seconds)</label>
 
                     <input
@@ -151,52 +204,185 @@ function PredictionForm() {
                         }
                         style={inputStyle}
                     />
-
                 </div>
 
-                <div>
+                {/* Estimated Delivery Days */}
 
+                <div>
                     <label>Estimated Delivery Days</label>
 
                     <input
                         type="number"
-                        value={form.delivery_days}
+                        value={form.estimated_delivery_days}
                         onChange={(e) =>
                             setForm({
                                 ...form,
-                                delivery_days: e.target.value
+                                estimated_delivery_days: e.target.value
                             })
                         }
                         style={inputStyle}
                     />
-
                 </div>
 
-                <div>
+                {/* Cash On Delivery */}
 
+                <div>
                     <label>Cash On Delivery</label>
 
                     <select
-                        value={form.cod_available}
+                        value={form.cash_on_delivery}
                         onChange={(e) =>
                             setForm({
                                 ...form,
-                                cod_available: e.target.value === "true"
+                                cash_on_delivery: e.target.value
                             })
                         }
                         style={inputStyle}
                     >
-
-                        <option value="true">
+                        <option value="Available">
                             Available
                         </option>
 
-                        <option value="false">
-                            Not Available
+                        <option value="Unavailable">
+                            Unavailable
+                        </option>
+                    </select>
+                </div>
+
+                {/* Country */}
+
+                <div>
+                    <label>Country</label>
+
+                    <select
+                        value={form.country}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                country: e.target.value
+                            })
+                        }
+                        style={inputStyle}
+                    >
+                        <option value="US">US</option>
+                        <option value="IN">India</option>
+                        <option value="UK">UK</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="BR">Brazil</option>
+                        <option value="ES">Spain</option>
+                        <option value="IT">Italy</option>
+                        <option value="NL">Netherlands</option>
+                        <option value="PL">Poland</option>
+                    </select>
+                </div>
+
+                {/* Customer Age */}
+
+                <div>
+                    <label>Customer Age</label>
+
+                    <input
+                        type="number"
+                        value={form.age}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                age: e.target.value
+                            })
+                        }
+                        style={inputStyle}
+                    />
+                </div>
+
+                {/* Marketing Opt-In */}
+
+                <div>
+                    <label>Marketing Opt-In</label>
+
+                    <select
+                        value={form.marketing_opt_in}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                marketing_opt_in:
+                                    e.target.value === "true"
+                            })
+                        }
+                        style={inputStyle}
+                    >
+                        <option value="true">
+                            Yes
                         </option>
 
+                        <option value="false">
+                            No
+                        </option>
                     </select>
+                </div>
 
+                {/* Device */}
+
+                <div>
+                    <label>Device</label>
+
+                    <select
+                        value={form.device}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                device: e.target.value
+                            })
+                        }
+                        style={inputStyle}
+                    >
+                        <option value="mobile">
+                            Mobile
+                        </option>
+
+                        <option value="desktop">
+                            Desktop
+                        </option>
+
+                        <option value="tablet">
+                            Tablet
+                        </option>
+                    </select>
+                </div>
+
+                {/* Traffic Source */}
+
+                <div>
+                    <label>Traffic Source</label>
+
+                    <select
+                        value={form.source}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                source: e.target.value
+                            })
+                        }
+                        style={inputStyle}
+                    >
+                        <option value="organic">
+                            Organic
+                        </option>
+
+                        <option value="email">
+                            Email
+                        </option>
+
+                        <option value="direct">
+                            Direct
+                        </option>
+
+                        <option value="paid">
+                            Paid
+                        </option>
+                    </select>
                 </div>
 
             </div>
@@ -218,100 +404,162 @@ function PredictionForm() {
             >
                 Predict Abandonment Risk
             </button>
-
-            {result && (
+                        {result && (
 
                 <div
                     style={{
-                        marginTop: "30px",
+                        marginTop: "35px",
                         background: "#f8fafc",
+                        padding: "30px",
                         borderRadius: "15px",
-                        padding: "25px",
                         borderLeft: `8px solid ${
                             result.risk_level === "High"
                                 ? "#ef4444"
                                 : result.risk_level === "Medium"
                                 ? "#f59e0b"
                                 : "#22c55e"
-                        }`
+                        }`,
+                        boxShadow: "0 5px 15px rgba(0,0,0,0.08)"
                     }}
                 >
 
-                    <h2>Prediction Result</h2>
+                    <h2
+                        style={{
+                            marginBottom: "20px",
+                            color: "#1e293b"
+                        }}
+                    >
+                        📊 Prediction Result
+                    </h2>
 
-                    <h3>
-                        Risk Score :
-                        <span
+                    <div
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "repeat(2,1fr)",
+                            gap: "20px"
+                        }}
+                    >
+
+                        <div
                             style={{
-                                color: "#2563eb",
-                                marginLeft: "8px"
+                                background: "#ffffff",
+                                padding: "18px",
+                                borderRadius: "10px"
                             }}
                         >
-                            {(result.risk_score * 100).toFixed(0)}%
-                        </span>
-                    </h3>
 
-                    <h3>
-                        Risk Level :
-                        <span
+                            <h3>Risk Score</h3>
+
+                            <h1
+                                style={{
+                                    color: "#2563eb",
+                                    marginTop: "10px"
+                                }}
+                            >
+                                {(result.risk_score * 100).toFixed(2)}%
+                            </h1>
+
+                        </div>
+
+                        <div
                             style={{
-                                color: badgeColor(),
-                                fontWeight: "bold",
-                                marginLeft: "8px"
+                                background: "#ffffff",
+                                padding: "18px",
+                                borderRadius: "10px"
                             }}
                         >
-                            {result.risk_level}
-                        </span>
-                    </h3>
 
-                    <h3>Diagnosis</h3>
+                            <h3>Risk Level</h3>
+
+                            <h1
+                                style={{
+                                    color: badgeColor(),
+                                    marginTop: "10px"
+                                }}
+                            >
+                                {result.risk_level}
+                            </h1>
+
+                        </div>
+
+                    </div>
+
+                    <hr
+                        style={{
+                            margin: "25px 0"
+                        }}
+                    />
+
+                    <h3>🔍 Diagnosis</h3>
 
                     <p
                         style={{
                             fontSize: "17px",
-                            color: "#374151"
+                            color: "#374151",
+                            lineHeight: "28px"
                         }}
                     >
                         {result.diagnosis}
                     </p>
 
-                    <h3>Recommended Action</h3>
+                    <h3
+                        style={{
+                            marginTop: "25px"
+                        }}
+                    >
+                        💡 Recommended Action
+                    </h3>
 
                     <p
                         style={{
                             fontSize: "17px",
-                            color: "#374151"
+                            color: "#374151",
+                            lineHeight: "28px"
                         }}
                     >
                         {result.recommended_action}
                     </p>
-                    <h3>Policy Decision</h3>
 
-<p
-  style={{
-    color: "#2563eb",
-    fontWeight: "bold"
-  }}
->
-  {result.policy_reason}
-</p>
-<h3>AI Review</h3>
+                    <h3
+                        style={{
+                            marginTop: "25px"
+                        }}
+                    >
+                        ✅ Policy Decision
+                    </h3>
 
-<p
-    style={{
-        color: "#16a34a",
-        fontWeight: "bold",
-        fontSize: "18px"
-    }}
->
-    {result.review_message}
-</p>
+                    <p
+                        style={{
+                            color: "#2563eb",
+                            fontWeight: "bold",
+                            fontSize: "18px"
+                        }}
+                    >
+                        {result.policy_reason}
+                    </p>
+
+                    <h3
+                        style={{
+                            marginTop: "25px"
+                        }}
+                    >
+                        🤖 AI Review
+                    </h3>
+
+                    <p
+                        style={{
+                            color: "#16a34a",
+                            fontWeight: "bold",
+                            fontSize: "18px"
+                        }}
+                    >
+                        {result.review_message}
+                    </p>
 
                 </div>
 
             )}
-
-        </div>
+                    </div>
 
     );
 
@@ -320,12 +568,22 @@ function PredictionForm() {
 const inputStyle = {
 
     width: "100%",
+
     padding: "12px",
+
     marginTop: "8px",
+
     borderRadius: "8px",
+
     border: "1px solid #d1d5db",
+
     fontSize: "16px",
-    boxSizing: "border-box"
+
+    boxSizing: "border-box",
+
+    outline: "none",
+
+    background: "#ffffff"
 
 };
 

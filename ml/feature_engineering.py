@@ -1,69 +1,170 @@
 import pandas as pd
 
-# Load dataset
-df = pd.read_csv("data/raw/ecommerce_clickstream_transactions.csv")
+print("Loading datasets...")
 
-# Convert timestamp
-df["Timestamp"] = pd.to_datetime(df["Timestamp"])
+# --------------------------
+# Load Datasets
+# --------------------------
 
-# Group by BOTH UserID and SessionID
-session_features = df.groupby(["UserID", "SessionID"]).agg(
+sessions = pd.read_csv("data/raw/sessions.csv")
+events = pd.read_csv("data/raw/events.csv")
+customers = pd.read_csv("data/raw/customers.csv")
 
-    page_views=("EventType", lambda x: (x == "page_view").sum()),
+# --------------------------
+# Convert timestamps
+# --------------------------
 
-    product_views=("EventType", lambda x: (x == "product_view").sum()),
+events["timestamp"] = pd.to_datetime(events["timestamp"])
 
-    add_to_cart=("EventType", lambda x: (x == "add_to_cart").sum()),
+# --------------------------
+# Page Views
+# --------------------------
 
-    purchases=("EventType", lambda x: (x == "purchase").sum()),
-
-    cart_value=("Amount", "sum"),
-
-    session_start=("Timestamp", "min"),
-
-    session_end=("Timestamp", "max")
-
+page_views = (
+    events[events["event_type"] == "page_view"]
+    .groupby("session_id")
+    .size()
+    .rename("Page Views")
 )
 
-# Session duration
-session_features["session_duration"] = (
-    session_features["session_end"] -
-    session_features["session_start"]
+# --------------------------
+# Product Views
+# --------------------------
+
+product_views = (
+    events[events["product_id"].notna()]
+    .groupby("session_id")
+    .size()
+    .rename("Product Views")
+)
+
+# --------------------------
+# Add To Cart
+# --------------------------
+
+add_to_cart = (
+    events[events["event_type"] == "add_to_cart"]
+    .groupby("session_id")
+    .size()
+    .rename("Add To Cart")
+)
+
+# --------------------------
+# Session Duration
+# --------------------------
+
+duration = (
+    events.groupby("session_id")["timestamp"]
+    .agg(["min", "max"])
+)
+
+duration["Session Duration"] = (
+    duration["max"] - duration["min"]
 ).dt.total_seconds()
 
-# Target label
-session_features["Purchased"] = (
-    session_features["purchases"] > 0
-).astype(int)
+duration = duration["Session Duration"]
 
-# Remove timestamp columns
-session_features.drop(
-    columns=["session_start", "session_end"],
-    inplace=True
+# --------------------------
+# Purchase Label
+# --------------------------
+
+purchase = (
+    events[events["event_type"] == "purchase"]
+    .groupby("session_id")
+    .size()
 )
 
-# Replace missing values
-session_features.fillna(0, inplace=True)
+purchase = purchase.apply(lambda x: 1)
+purchase.name = "Purchased"
 
-# Save processed data
-session_features.to_csv(
-    "data/processed/session_features.csv"
+# --------------------------
+# Build Feature Table
+# --------------------------
+
+features = sessions[
+    [
+        "session_id",
+        "customer_id",
+        "device",
+        "source"
+    ]
+].copy()
+
+features = features.merge(
+    page_views,
+    on="session_id",
+    how="left"
 )
 
-print("="*50)
-print("Feature Engineering Completed")
-print("="*50)
+features = features.merge(
+    product_views,
+    on="session_id",
+    how="left"
+)
 
-print()
+features = features.merge(
+    add_to_cart,
+    on="session_id",
+    how="left"
+)
 
-print(session_features.head())
+features = features.merge(
+    duration,
+    on="session_id",
+    how="left"
+)
 
-print()
+features = features.merge(
+    purchase,
+    on="session_id",
+    how="left"
+)
 
-print("Shape:", session_features.shape)
+# --------------------------
+# Customer Data
+# --------------------------
 
-print()
+features = features.merge(
+    customers[
+        [
+            "customer_id",
+            "country",
+            "age",
+            "marketing_opt_in"
+        ]
+    ],
+    on="customer_id",
+    how="left"
+)
 
-print("Purchased Distribution")
+# --------------------------
+# Fill Missing Values
+# --------------------------
 
-print(session_features["Purchased"].value_counts())
+features["Page Views"] = features["Page Views"].fillna(0)
+features["Product Views"] = features["Product Views"].fillna(0)
+features["Add To Cart"] = features["Add To Cart"].fillna(0)
+features["Session Duration"] = features["Session Duration"].fillna(0)
+features["Purchased"] = features["Purchased"].fillna(0)
+
+# --------------------------
+# Simulated Business Features
+# --------------------------
+
+features["Estimated Delivery Days"] = 2
+features["Cash On Delivery"] = "Available"
+
+# --------------------------
+# Save Dataset
+# --------------------------
+
+features.to_csv(
+    "data/processed/session_features.csv",
+    index=False
+)
+
+print("\nFeature Engineering Completed Successfully!\n")
+print(features.head())
+print("\nDataset Shape:", features.shape)
+print("\nColumns:")
+print(features.columns.tolist())
