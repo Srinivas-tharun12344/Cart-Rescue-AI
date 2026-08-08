@@ -1,20 +1,29 @@
 import { useState } from "react";
 import api from "../services/api";
 
-function Payment() {
+function Payment({ refreshDashboard }) {
 
   const [response, setResponse] = useState(null);
 
   // -------------------------
   // Successful Payment
   // -------------------------
+
   const paymentSuccess = () => {
 
     const risk = localStorage.getItem("risk_level") || "Low";
 
-    api.post(`/payment?status=success&risk_level=${risk}`)
+    api
+      .post(`/payment?status=success&risk_level=${risk}`)
       .then((res) => {
+
         setResponse(res.data);
+
+        // Refresh Dashboard
+        if (refreshDashboard) {
+          refreshDashboard();
+        }
+
       })
       .catch((err) => {
         console.log(err);
@@ -25,13 +34,22 @@ function Payment() {
   // -------------------------
   // Failed Payment
   // -------------------------
+
   const paymentFailed = () => {
 
     const risk = localStorage.getItem("risk_level") || "Low";
 
-    api.post(`/payment?status=failed&risk_level=${risk}`)
+    api
+      .post(`/payment?status=failed&risk_level=${risk}`)
       .then((res) => {
+
         setResponse(res.data);
+
+        // Refresh Dashboard
+        if (refreshDashboard) {
+          refreshDashboard();
+        }
+
       })
       .catch((err) => {
         console.log(err);
@@ -115,7 +133,7 @@ function Payment() {
 
           <h2>{response.message}</h2>
 
-          {/* ---------------- Success ---------------- */}
+          {/* Success */}
 
           {response.status === "success" && (
 
@@ -140,7 +158,7 @@ function Payment() {
 
           )}
 
-          {/* ---------------- Coupon Generated ---------------- */}
+          {/* Coupon */}
 
           {response.status === "failed" && response.coupon && (
 
@@ -182,7 +200,7 @@ function Payment() {
 
           )}
 
-          {/* ---------------- Retry Payment ---------------- */}
+          {/* Retry */}
 
           {response.status === "failed" && !response.coupon && (
 

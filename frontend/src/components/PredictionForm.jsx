@@ -285,6 +285,27 @@ function PredictionForm() {
                     >
                         {result.recommended_action}
                     </p>
+                    <h3>Policy Decision</h3>
+
+<p
+  style={{
+    color: "#2563eb",
+    fontWeight: "bold"
+  }}
+>
+  {result.policy_reason}
+</p>
+<h3>AI Review</h3>
+
+<p
+    style={{
+        color: "#16a34a",
+        fontWeight: "bold",
+        fontSize: "18px"
+    }}
+>
+    {result.review_message}
+</p>
 
                 </div>
 

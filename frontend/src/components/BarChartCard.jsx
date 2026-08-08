@@ -6,22 +6,26 @@ import {
   Tooltip,
   CartesianGrid,
   ResponsiveContainer,
+  Cell,
 } from "recharts";
 
 function BarChartCard({ data }) {
 
   const chart = [
     {
-      name: "High",
-      value: data?.high_risk || 0,
+      name: "Without AI",
+      value: data?.holdout?.without_ai || 0,
+      color: "#ef4444",
     },
     {
-      name: "Medium",
-      value: data?.medium_risk || 0,
+      name: "With AI",
+      value: data?.holdout?.with_ai || 0,
+      color: "#22c55e",
     },
     {
-      name: "Low",
-      value: data?.low_risk || 0,
+      name: "Improvement",
+      value: data?.holdout?.improvement || 0,
+      color: "#2563eb",
     },
   ];
 
@@ -37,21 +41,35 @@ function BarChartCard({ data }) {
         boxShadow: "0 8px 20px rgba(0,0,0,0.12)",
       }}
     >
-      <h2 style={{ marginBottom: "20px" }}>
-        Risk Levels
+      <h2
+        style={{
+          marginBottom: "20px",
+        }}
+      >
+        🤖 AI Holdout Validation
       </h2>
 
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={chart}>
           <CartesianGrid strokeDasharray="3 3" />
+
           <XAxis dataKey="name" />
+
           <YAxis />
+
           <Tooltip />
-          <Bar
-            dataKey="value"
-            fill="#2563eb"
-            radius={[8, 8, 0, 0]}
-          />
+
+          <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+
+            {chart.map((entry, index) => (
+              <Cell
+                key={index}
+                fill={entry.color}
+              />
+            ))}
+
+          </Bar>
+
         </BarChart>
       </ResponsiveContainer>
     </div>
